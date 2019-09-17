@@ -5,13 +5,11 @@ import time
 
 class Interface:
     def __init__(self):
-        self.connector
+        self.connection = serial.Serial('/dev/ttyUSB0', baudrate=115200)
     def open(self):
         #self.connection.open()
         kDelay = 0.0125
         time.sleep(kDelay)
-    def connect(self):
-        connection = serial.Serial('/dev/ttyUSB0', baudrate=115200)
     def start(self):
         connection.write(chr(128))
     def restart(self):
