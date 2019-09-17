@@ -34,6 +34,7 @@ class Interface:
         #
         # Test drive
         # Should drive in reverse @ -200 mm/s & turn @ radius of 500 mm
+        # need to set values of movement as parameters as function after testing for functionality
         connection.write(chr(255))
         connection.write(chr(56))
         connection.write(chr(1))
