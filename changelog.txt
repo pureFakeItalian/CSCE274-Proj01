@@ -1,0 +1,22 @@
+This document lists all the major changes from the previous files.
+
+general:
+---->	I made some effort to partition each file to a particular task: 			interface.py deals with Task 1 and control_interface deals with Task 2.
+
+interface.py:
+---->	Interface now functions as a low-level manager of the serial connection. it mainly reads and writes data.
+
+control_interface.py:
+---->	Changing the state of the roomba is one function that references a dictionary for each state-changing opcode.
+---->	I've also made a dictionary to keep track of how many bytes are returned with each sensor packet request.
+---->	I've tried to streamline the code as much as possible, and to make each "action" it's own function: getting a packet, reading the buttons, setting the state and driving.
+
+What the fuck is struct?:
+---->	Struct is a python module that we need to use to communicate with the roomba, because it runs on C. Struct allows us to take data and split it into bytes directly, which is needed because the roomba sends the bytes all at once.
+----> unpack turns the data into a tuple, and pack splits it into multiple variables.
+
+Is the code ready for testing/debugging?:
+---->	yes
+
+Has it been tested?:
+---->	12%, also known as fixing syntax errors
