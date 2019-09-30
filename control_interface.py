@@ -5,8 +5,9 @@
 import interface    #includes time.sleep()
 from struct import unpack
 from struct import pack
+from time import sleep
 
-class controlInterface:
+class ControlInterface:
 
 	#Control Interface uses Interface to interact with and control the Roomba.
 	#This builds off of interface.py, but gives some higher level functionality to the code.
@@ -24,7 +25,7 @@ class controlInterface:
 			#an array that keeps track of each button state: 0->unpressed, 1->pressed
 			#buttons are: clock, schedule, day, hour, minute, dock, spot, clean; respectively
 
-	def setState(stateString, self): #changes the mode of the Roomba
+	def setState(self, stateString): #changes the mode of the Roomba
 		opcode = self.states[stateString] #gets the proper opcode from the states dictionary
 		self.interface.write(chr(opcode))
 
@@ -41,13 +42,15 @@ class controlInterface:
 		for i in packetBin:
 			self.buttons[i] = packetBin[i]
 
-	def drive(v, r, self):
-		#split v into v1 and v2
-		#split r into r1 and r2
-		v1, v2 = pack('<i', v&0xFFFF)
-		r1, r2 = pack('<i', r&0xFFFF)
-		self.interface.write(chr(137)+chr(v1)+chr(v2)+chr(r1)+chr(r2))	#sends the drive command to the Roomba
+	def drive(self, v, r):
+		#dummy1, dummy2, v1, v2 = pack('<i', v&0xF)	#pack returns 4 bytes for each int, but we only want
+		#dummy3, dummy4, r1, r2 = pack('<i', r&0xF)	#the last two for each value cause they're so small
+		self.interface.write(pack('>B2h', 137, v, r))	#sends the drive command to the Roomba
 		
-	self = ControlInterface()
-	self.setState('start')
-	self.drive(50, 0)
+		
+self = ControlInterface()
+sleep(0.0125)
+self.setState('start')
+sleep(0.0125)
+self.drive(50, 0)
+sleep(0.0125)

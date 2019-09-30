@@ -3,7 +3,6 @@
 #Only permitted for use in projects written by Christopher Brooks, Jackson Matthews and/or Zachary Lynch
 
 from serial import Serial
-from time import sleep
 class Interface:
 
 	#Interface serves as a manager for the serial connection between the Raspberry Pi and the Roomba.
@@ -21,7 +20,7 @@ class Interface:
 		ret = self.connection.read(n)
 		return ret
 
-	def write(data, self):
+	def write(self, data):
 		self.connection.write(data)
 
 	def close(self):
