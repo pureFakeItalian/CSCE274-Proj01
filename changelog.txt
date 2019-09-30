@@ -11,3 +11,10 @@ control_interface.py:
 ---->	Added sleep from time module
 ---->	Fixed communication with roomba
 ---->	Partially fixed drive command, still needs work.
+
+
+UPDATE:
+Errors:
+---->	Issue in drive command. Caused by pack command.
+	Doesn't create 4 bytes for the drive command, creates 3.
+	Will email Ibrahim for help and possible "demo" code

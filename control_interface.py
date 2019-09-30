@@ -2,7 +2,7 @@
 #Copyright 2019
 #Only permitted for use in projects written by Christopher Brooks, Jackson Matthews and/or Zachary Lynch
 
-import interface    #includes time.sleep()
+import interface
 from struct import unpack
 from struct import pack
 from time import sleep
@@ -29,7 +29,7 @@ class ControlInterface:
 		opcode = self.states[stateString] #gets the proper opcode from the states dictionary
 		self.interface.write(chr(opcode))
 
-	def getPacket(id, self):	#A helper command to request packets from the Roomba. Returns an array of bytes.
+	def getPacket(self, id):	#A helper command to request packets from the Roomba. Returns an array of bytes.
 		self.interface.write(chr(142)+chr(id))	#sends the command to the Roomba
 		count = self.packetIds[id]
 		retPacket = self.interface.readBytes(count)	#a byte packet from the Roomba
@@ -42,15 +42,23 @@ class ControlInterface:
 		for i in packetBin:
 			self.buttons[i] = packetBin[i]
 
-	def drive(self, v, r):
-		#dummy1, dummy2, v1, v2 = pack('<i', v&0xF)	#pack returns 4 bytes for each int, but we only want
-		#dummy3, dummy4, r1, r2 = pack('<i', r&0xF)	#the last two for each value cause they're so small
-		self.interface.write(pack('>B2h', 137, v, r))	#sends the drive command to the Roomba
+
+
+
+	def drive(self, v, r):		#TODO: ERROR IN COMMUNICATION
+		print repr((pack('>B2h', 137, v, r)))	#prints '\x89\x002\x00\x00'		WHAT THE FUCK
+		data = pack('>B2h', 137, v, r)
+		self.interface.write(data)	#sends the drive command to the Roomba
 		
 		
-self = ControlInterface()
+		
+		
+		
+		
+		
+robot = ControlInterface()
 sleep(0.0125)
-self.setState('start')
+robot.setState('start')
 sleep(0.0125)
-self.drive(50, 0)
+robot.drive(50, 0)
 sleep(0.0125)
