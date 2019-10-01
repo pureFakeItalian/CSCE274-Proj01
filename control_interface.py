@@ -5,6 +5,7 @@
 import interface
 from struct import unpack
 from struct import pack
+from struct import calcsize
 from time import sleep
 
 class ControlInterface:
@@ -20,10 +21,6 @@ class ControlInterface:
 			
 		self.states = {'start':128, 'reset':7, 'stop':173, 'passive':128, 'safe':131}
 			#states is a dictionary that, when given any of these strings, returns the corresponding opcode
-			
-		self.buttons = [0,0,0,0,0,0,0,0]
-			#an array that keeps track of each button state: 0->unpressed, 1->pressed
-			#buttons are: clock, schedule, day, hour, minute, dock, spot, clean; respectively
 
 	def setState(self, stateString): #changes the mode of the Roomba
 		opcode = self.states[stateString] #gets the proper opcode from the states dictionary
@@ -33,32 +30,21 @@ class ControlInterface:
 		self.interface.write(chr(142)+chr(id))	#sends the command to the Roomba
 		count = self.packetIds[id]
 		retPacket = self.interface.readBytes(count)	#a byte packet from the Roomba
-		bytes = unpack('B', retPacket)	#using unpack to create a tuple of bytes
-		return bytes
+		return retPacket
 		
-	def readButtons(self):	#Gets the sensor data of the buttons and updates the buttons array.
-		packet = self.interface.getPacket(18)
-		packetBin = bin(packet[0])	#byte -> bit string
-		for i in packetBin:
-			self.buttons[i] = packetBin[i]
-
-
-
-
-	def drive(self, v, r):		#TODO: ERROR IN COMMUNICATION
-		print repr((pack('>B2h', 137, v, r)))	#prints '\x89\x002\x00\x00'		WHAT THE FUCK
-		data = pack('>B2h', 137, v, r)
+	def readButton(self):	#Detects if the clean button is pressed or not.
+		byte = self.interface.getPacket(18)
+		button = unpack('B', byte)[0]
+		return bool(button&0x01)
+		
+	def drive(self, v, r):
+		data = pack('>hhh', 137, v, r)	#compiles the data into a byte string
 		self.interface.write(data)	#sends the drive command to the Roomba
-		
-		
-		
-		
-		
-		
 		
 robot = ControlInterface()
 sleep(0.0125)
 robot.setState('start')
+robot.setState('safe')
 sleep(0.0125)
 robot.drive(50, 0)
 sleep(0.0125)
