@@ -1,12 +1,14 @@
 This document lists all the major changes from the previous files.
 
 general:
----->	Task 2 is done
----->	Does not follow the new format, but it works.
+---->	Added proj1.py. This is the file we will use for Task 3
 
 interface.py:
----->	Removed time module
+---->	Minor changes
 
 control_interface.py:
----->	Added sleep from time module
----->	Fixed communication with roomba
+---->	Minor changes
+
+proj1.py:
+---->	Still needs command line input for the number of sides.
+---->	Drives the roomba, but doesn't stop when commanded. Could be an issue with the time module or a while loop.

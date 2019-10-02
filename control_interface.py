@@ -5,8 +5,7 @@
 import interface
 from struct import unpack
 from struct import pack
-from struct import calcsize
-from time import sleep
+import time
 
 class ControlInterface:
 
@@ -33,18 +32,19 @@ class ControlInterface:
 		return retPacket
 		
 	def readButton(self):	#Detects if the clean button is pressed or not.
-		byte = self.interface.getPacket(18)
-		button = unpack('B', byte)[0]
+		byte = self.getPacket(18)
+		button = unpack('B', byte)[0]	#reads the button state
 		return bool(button&0x01)
 		
 	def drive(self, v, r):
-		data = pack('>hhh', 137, v, r)	#compiles the data into a byte string
+		data = pack('>B2h', 137, v, r)	#compiles the data into a byte string
 		self.interface.write(data)	#sends the drive command to the Roomba
 		
-robot = ControlInterface()
-sleep(0.0125)
-robot.setState('start')
-robot.setState('safe')
-sleep(0.0125)
-robot.drive(50, 0)
-sleep(0.0125)
+#======TEST COMMANDS======#
+#robot = ControlInterface()
+#sleep(0.0125)
+#robot.setState('start')
+#robot.setState('safe')
+#sleep(0.0125)
+#robot.drive(250,0)
+#sleep(0.0125)

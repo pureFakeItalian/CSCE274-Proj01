@@ -16,7 +16,7 @@ class Interface:
 	def powerOff(self):
 		self.connection.write(chr(133))
 
-	def readBytes(n, self):	#returns an array of n bytes
+	def readBytes(self, n):	#returns an array of n bytes
 		ret = self.connection.read(n)
 		return ret
 
