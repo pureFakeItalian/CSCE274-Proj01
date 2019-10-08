@@ -37,7 +37,8 @@ class ControlInterface:
 		return bool(button&0x01)
 		
 	def drive(self, v, r):
-		data = pack('>B2h', 137, v, r)	#compiles the data into a byte string
+		
+		data = pack('>b2h', 137, v, r)	#compiles the data into a byte string
 		self.interface.write(data)	#sends the drive command to the Roomba
 		
 #======TEST COMMANDS======#

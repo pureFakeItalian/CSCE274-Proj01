@@ -1,14 +1,4 @@
 This document lists all the major changes from the previous files.
 
 general:
----->	Added proj1.py. This is the file we will use for Task 3
-
-interface.py:
----->	Minor changes
-
-control_interface.py:
----->	Minor changes
-
-proj1.py:
----->	Still needs command line input for the number of sides.
----->	Drives the roomba, but doesn't stop when commanded. Could be an issue with the time module or a while loop.
+---->	Almost done, we (I) just need to change some code so that the Roomba turns.
