@@ -9,7 +9,7 @@ import time
 
 class ControlInterface:
 
-	#Control Interface uses Interface to interact with and control the Roomba.
+	#Control Interface is an extension of Interface designed to control the Roomba.
 	#This builds off of interface.py, but gives some higher level functionality to the code.
 
 	def __init__(self):
@@ -33,12 +33,12 @@ class ControlInterface:
 		
 	def readButton(self):	#Detects if the clean button is pressed or not.
 		byte = self.getPacket(18)
-		button = unpack('B', byte)[0]	#reads the button state
+		button = unpack('B', byte)[0]	#reads the button state ===Currently, this is just the clean button. However, this can be easily fixed===
 		return bool(button&0x01)
 		
-	def drive(self, v, r):
+	def drive(self, vr, vl):		#uses the DRIVE DIRECT command to command the roomba
 		
-		data = pack('>b2h', 137, v, r)	#compiles the data into a byte string
+		data = pack('>hhh', 145, vr, vl)	#compiles the data into a byte string
 		self.interface.write(data)	#sends the drive command to the Roomba
 		
 #======TEST COMMANDS======#
@@ -47,5 +47,7 @@ class ControlInterface:
 #robot.setState('start')
 #robot.setState('safe')
 #sleep(0.0125)
-#robot.drive(250,0)
+#robot.drive(100,100)
 #sleep(0.0125)
+#robot.drive(0,0)
+#robot.setState('passive')

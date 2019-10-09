@@ -16,22 +16,16 @@ def shape(sides):
 	perimeter = 2000.0	#millimeters
 	sideLength = perimeter/sides
 	buttonPressed = False
-	velocity = 200.0	#millimeters per second
+	velocity = 170.0	#millimeters per second
 	length = 235.0	#distance between Roomba wheels in millimeters
 	
-	theta = (2*math.pi)/sides	#interior angle in rads
-	timeSide = sideLength/velocity	#delta-t to traverse one side
-	angleVelocity = (2*velocity)/length
+	theta = (2*math.pi)/sides		#interior angle in rads
+	timeSide = sideLength/velocity		#delta-t to traverse one side
+	angleVelocity = (2*velocity)/length	#copied formula from lecture slides
 	timeTurn = 	theta/angleVelocity		#delta-t to turn to the next side of the polygon
 	
-	print(sideLength)
-	print(theta)
-	print(timeSide)				#=== Debugging ===#
-	print(angleVelocity)
-	print(timeTurn)
-	
-	timeCalibration = 0.1		#adjustments to time variables; account for nonidealities
-	turnCalibration = 0.1
+	timeCalibration = 0.11		#adjustments to time variables; account for nonidealities
+	turnCalibration = 0.0825
 	timeSide = timeSide*timeCalibration
 	timeTurn = timeTurn*turnCalibration
 	
@@ -41,53 +35,47 @@ def shape(sides):
 		
 	isPressed = False
 	i = 0
-	print('start')
-	time.sleep(0.25)	#buffer
+	print('Start')
+	time.sleep(0.25)	#buffer to prevent unwanted button presses
 	
-	while i < sides:		#driving
-		robot.drive(velocity, 0)	#go straight
+	while i < sides:		#start driving
+		robot.drive(velocity, velocity)	#go straight
 		
 		startTime = time.clock()
 		isPressed = False
-		
 		while (time.clock()-startTime) < timeSide:		#look for button presses while driving
 			buttonPressed = robot.readButton()
-			print(time.clock()-startTime)
-			print(timeSide)
 			if isPressed == False and buttonPressed == True:
 				isPressed = buttonPressed
-				print('button has been pressed')
+				print('Button has been pressed')
 		
 		if isPressed == True:
-			print('break')
-			break			#stop the program
+			print('Break')
+			break			#stop the function
 		
 		robot.drive(0,0)	#stop
 		time.sleep(0.0125)		#buffer
-		robot.drive(0,1)	#turn in place ccwise
+		robot.drive(velocity,-velocity)	#turn in place ccwise
 		
 		startTime = time.clock()
 		isPressed = False
-		
 		while (time.clock()-startTime) < timeTurn:		#look for button presses while turning
 			buttonPressed = robot.readButton()
-			print(time.clock()-startTime)
-			print(timeTurn)
 			if isPressed == False and buttonPressed == True:
 				isPressed = buttonPressed
-				print('button has been pressed')
+				print('Button has been pressed')
 		
 		if isPressed == True:
-			print('break')
-			break			#stop the program
+			print('Break')
+			break			#stop the function
 		
 		robot.drive(0,0)	#stop
 		time.sleep(0.0125)		#buffer
 		buttonPressed = robot.readButton()
-		i = i+1
+		i = i+1		#move to the next side
 	
-	robot.drive(0,0)	#stop
-	print('done')
+	robot.drive(0,0)	#stop moving
+	print('Done')
 	
 	
 robot = control_interface.ControlInterface()
@@ -98,9 +86,10 @@ robot.setState('start')
 time.sleep(0.0125)
 robot.setState('safe')
 
-parser = argparse.ArgumentParser()	#use command line input
+parser = argparse.ArgumentParser()		#read command line argument
 parser.add_argument('val', type=int, help='number of sides')
 N = parser.parse_args()		#get number of sides
+
 shape(N.val)
 
 robot.setState('passive')
